@@ -44,6 +44,11 @@ public class WallBuilder
         return block_matrix[i, j];
     }
 
+    public GameObject BuildWall(Vector2Int pos)
+    {
+        return BuildWall(pos.x, pos.y);
+    }
+
     public WallBuilder(GameObject block, GameObject father, int width, int height, 
         float cell_width, float cell_height, float cell_high)
     {

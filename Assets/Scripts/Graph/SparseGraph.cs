@@ -53,6 +53,8 @@ public class SparseGraph<TNode> : IGraph<TNode>
     // add node to others
     public void Add(TNode a)
     {
+        if (nodes.Contains(a))
+            return;
         nodes.Add(a);
         edges[a] = new HashSet<TNode>();
     }

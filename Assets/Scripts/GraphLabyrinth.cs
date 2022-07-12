@@ -29,7 +29,7 @@ public class GraphLabyrinth : SparseGraph<Vector2Int>
         }
     }
 
-    GraphLabyrinth(int width, int height)
+    public GraphLabyrinth(int width, int height)
     {
         this.width = width;
         this.height = height;

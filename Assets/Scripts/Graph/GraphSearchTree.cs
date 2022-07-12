@@ -8,7 +8,12 @@ public class MarkingForGraph<TNode>
     // marking graph
     public IGraph<TNode> Graph { get; set; }
 
-    private Dictionary<TNode, bool> mark;
+    private Dictionary<TNode, bool> mark = new Dictionary<TNode, bool>();
+
+    public MarkingForGraph(IGraph<TNode> graph)
+    {
+        Graph = graph;
+    }
 
     // mark node
     public void Mark(TNode a)
