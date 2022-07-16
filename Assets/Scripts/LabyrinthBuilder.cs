@@ -5,7 +5,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 
 
-public class Labyrinth : MonoBehaviour
+public class LabyrinthBuilder : MonoBehaviour
 {
     [SerializeField]
     private int width, height;
@@ -16,7 +16,10 @@ public class Labyrinth : MonoBehaviour
     [SerializeField]
     private GameObject block;
 
-    private GraphLabyrinth graph;
+    [SerializeField]
+    private GameObject ground;
+
+    private IGraph<Vector2Int> graph;
     private WallBuilder builder;
 
     public int WidthPh { get { return 2*width + 1; } }
@@ -31,7 +34,12 @@ public class Labyrinth : MonoBehaviour
         return 2 * b + new Vector2Int(1,1) + d;
     }
 
-    public void BuildInnerWalls()
+    public Vector3 PhysicPosition(Vector2Int pos)
+    {
+        return new Vector3(pos.x * cell_width, 0, pos.y * cell_height);
+    }
+
+    private void BuildInnerWalls()
     {
         for (int i = 0; i < WidthPh; ++i)
         {
@@ -43,7 +51,7 @@ public class Labyrinth : MonoBehaviour
         }
     }
 
-    public void BuildRegionEdge()
+    private void BuildRegionEdge()
     {
         for (int i = 0; i < HeightPh; ++i)
         {
@@ -57,7 +65,7 @@ public class Labyrinth : MonoBehaviour
         }
     }
 
-    public void BuildLabyrinth()
+    private void BuildLabyrinth()
     {
         Vector2Int[] dir = new Vector2Int[4];
         dir[0] = new Vector2Int(0, -1);
@@ -79,21 +87,25 @@ public class Labyrinth : MonoBehaviour
         }
     }
 
+    private void BuildGround()
+    {
+        GameObject obj = GameObject.Instantiate(ground,
+                transform.position,
+                Quaternion.identity);
+        obj.transform.parent = transform;
+        obj.transform.localScale = 0.1f * new Vector3(WidthPh * cell_width, 1, HeightPh * cell_height);
+    }
+
     public void Start()
     {
         builder = new WallBuilder(block, gameObject, WidthPh, HeightPh, 
             cell_width, cell_height, cell_high);
-        GraphLabyrinth pre_graph = new GraphLabyrinth(width, height);
 
-        Func<IEnumerable<Vector2Int>, IEnumerable<Vector2Int>> chooser = 
-            RandomSequence<Vector2Int>.rand_permutation;
-        MarkingForGraph<Vector2Int> mfg = new MarkingForGraph<Vector2Int>(pre_graph);
-        IGraph<Vector2Int> _graph = new GraphLabyrinth(width, height);
-        mfg.DepthSearchTree(ref _graph, new Vector2Int(0,0), chooser);
-        graph = (GraphLabyrinth) _graph;
+        graph = LabyrinthGenerator.Generate(width, height, Vector2Int.zero);
 
         BuildInnerWalls();
         BuildRegionEdge();
         BuildLabyrinth();
+        BuildGround();
     }
 }

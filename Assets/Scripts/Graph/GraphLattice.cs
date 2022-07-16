@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GraphLabyrinth : SparseGraph<Vector2Int>
+public class GraphLattice : SparseGraph<Vector2Int>
 {
     private int width, height;
 
@@ -29,7 +29,7 @@ public class GraphLabyrinth : SparseGraph<Vector2Int>
         }
     }
 
-    public GraphLabyrinth(int width, int height)
+    public GraphLattice(int width, int height)
     {
         this.width = width;
         this.height = height;

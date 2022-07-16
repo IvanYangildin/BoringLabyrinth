@@ -27,13 +27,10 @@ public class RandomSequence<TNode>
 
         List<TNode> list_orig = x.ToList();
         List<TNode> list_res = new List<TNode>();
-        string deb_line = "";
         foreach (int i in re_list)
         {
-            deb_line += i.ToString() + " ";
             list_res.Add(list_orig[i]);
         }
-        Debug.Log(deb_line);
 
         return list_res;
     }
